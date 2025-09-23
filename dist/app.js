@@ -8,7 +8,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-// Fisher-Yates shuffle (dùng cho mảng bất kỳ)
+// Fisher-Yates shuffle
 function shuffleArray(arr) {
     const a = arr.slice();
     for (let i = a.length - 1; i > 0; i--) {
@@ -33,13 +33,11 @@ function getPokemons() {
         return pokemons;
     });
 }
-// tạo element .card (tạo 2 bản sao bằng cách gọi 2 lần với copyIndex khác nhau)
+// tạo element .card
 function createCardElement(p, copyIndex) {
     const card = document.createElement("div");
     card.className = "card";
-    // data-pair để nhận biết 2 bản sao cùng loại (ví dụ data-pair="25")
     card.setAttribute("data-pair", String(p.id));
-    // data-card unique để debug/truy xuất nếu cần
     card.setAttribute("data-card", `${p.id}-${copyIndex}`);
     card.innerHTML = `
     <span class="badge">#${p.id}</span>
@@ -49,13 +47,12 @@ function createCardElement(p, copyIndex) {
   `;
     return card;
 }
-// shuffle trực tiếp DOM nodes (appendChild sẽ di chuyển node thay vì tạo mới)
+// shuffle trực tiếp DOM
 function shuffleDom(container) {
     const nodes = Array.from(container.children);
     if (nodes.length <= 1)
         return;
     let shuffled = shuffleArray(nodes);
-    // nếu vô tình shuffle ra cùng thứ tự ban đầu, shuffle lại vài lần (tối đa 6 lần)
     let tries = 0;
     const originalOrder = nodes.map(n => n.getAttribute("data-card"));
     while (JSON.stringify(shuffled.map(n => n.getAttribute("data-card"))) ===
@@ -64,34 +61,28 @@ function shuffleDom(container) {
         shuffled = shuffleArray(nodes);
         tries++;
     }
-    // add animation class nhanh để thấy effect
     shuffled.forEach(n => n.classList.add("shuffling"));
-    // reorder DOM theo shuffled
-    // appendChild sẽ move node hiện có
     shuffled.forEach(n => container.appendChild(n));
-    // remove animation class sau 420ms
     setTimeout(() => {
         shuffled.forEach(n => n.classList.remove("shuffling"));
     }, 420);
 }
-// KHỞI TẠO sau khi DOM sẵn sàng
+// 👉 arrow function show
+const show = (pokemons, container) => {
+    container.innerHTML = ""; // clear trước
+    pokemons.forEach(p => {
+        container.appendChild(createCardElement(p, 0));
+        container.appendChild(createCardElement(p, 1));
+    });
+};
+// khởi tạo
 document.addEventListener("DOMContentLoaded", () => __awaiter(void 0, void 0, void 0, function* () {
     const container = document.getElementById("pokemon-list");
     const shuffleBtn = document.getElementById("shuffle-btn");
-    // fetch 12 pokemon
     const pokemons = yield getPokemons(12);
-    // tạo 2 bản sao cho mỗi pokemon → push vào mảng cards
-    const cards = [];
-    pokemons.forEach(p => {
-        cards.push(createCardElement(p, 0));
-        cards.push(createCardElement(p, 1));
-    });
-    // append tất cả (ban đầu theo thứ tự: mỗi cặp liên tiếp)
-    cards.forEach(c => container.appendChild(c));
-    console.log("Initial cards count:", container.children.length);
-    // gán sự kiện shuffle — đảm bảo nút tồn tại
+    // dùng arrow function show
+    show(pokemons, container);
     shuffleBtn.addEventListener("click", () => {
-        console.log("Shuffle button clicked");
         shuffleDom(container);
     });
 }));
