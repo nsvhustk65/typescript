@@ -1,0 +1,76 @@
+body {
+  font-family: Arial, sans-serif;
+  text-align: center;
+  padding: 18px;
+  background: #f7f7f7;
+}
+
+h1 { margin-bottom: 6px; }
+p { margin-top: 0; color: #555; }
+
+#shuffle-btn {
+  padding: 10px 18px;
+  margin: 12px 0 18px;
+  background: #0069d9;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+#shuffle-btn:hover { background: #0053a6; }
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 12px;
+  max-width: 980px;
+  margin: 0 auto;
+}
+
+.card {
+  background: #fff;
+  border-radius: 8px;
+  padding: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  text-align: center;
+  transition: transform 220ms ease, opacity 220ms ease;
+  min-height: 120px;
+  position: relative;
+}
+
+/* Badge hiển thị id/pair */
+.badge {
+  position: absolute;
+  left: 6px;
+  top: 6px;
+  background: #f0d57a;
+  color: #333;
+  padding: 3px 7px;
+  border-radius: 6px;
+  font-size: 12px;
+}
+
+/* class tạm thời khi shuffle: bật hiệu ứng */
+.card.shuffling {
+  transform: translateY(-8px) scale(1.02);
+  opacity: 0.95;
+}
+
+/* ảnh */
+.card img {
+  width: 72px;
+  height: 72px;
+  object-fit: contain;
+  display: block;
+  margin: 10px auto;
+}
+.card h3 {
+  margin: 6px 0 4px;
+  font-size: 14px;
+  text-transform: capitalize;
+}
+.card p.type {
+  margin: 0;
+  font-size: 12px;
+  color: #666;
+}
